@@ -1,11 +1,11 @@
-# 🏦 LastBank — Banking Management System
+# LastBank — Banking Management System
 
 A comprehensive, full-stack Banking Management System built with **Core Java**, demonstrating advanced **Object-Oriented Programming** concepts, **Design Patterns**, **SQLite JDBC** persistence, and a modern **Web UI** — all without any heavy frameworks.
 
 
 ---
 
-## 🚀 Features
+##  Features
 
 ### Core Banking Operations
 - **Customer Management** — Register, view, search, and delete customers with KYC validation (PAN, Phone, Email)
