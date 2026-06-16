@@ -2,9 +2,6 @@
 
 A comprehensive, full-stack Banking Management System built with **Core Java**, demonstrating advanced **Object-Oriented Programming** concepts, **Design Patterns**, **SQLite JDBC** persistence, and a modern **Web UI** — all without any heavy frameworks.
 
-![Java](https://img.shields.io/badge/Java-17+-blue?logo=openjdk)
-![SQLite](https://img.shields.io/badge/SQLite-JDBC-green?logo=sqlite)
-![License](https://img.shields.io/badge/License-MIT-yellow)
 
 ---
 
@@ -123,27 +120,9 @@ BankingManagementSystem/
 ├── lib/
 │   └── sqlite-jdbc-3.47.2.0.jar         # SQLite JDBC driver
 ├── run.bat                              # One-click compile & run
-├── .gitignore
-└── README.md
 ```
 
----
 
-## ⚡ Quick Start
-
-### Prerequisites
-- **Java JDK 17+** installed and added to PATH
-
-### Run the Application
-
-```bash
-# Clone the repository
-git clone https://github.com/YOUR_USERNAME/BankingManagementSystem.git
-cd BankingManagementSystem
-
-# Run (Windows)
-.\run.bat
-```
 
 The application starts:
 1. **Console Interface** — Interactive menu-driven CLI
@@ -188,12 +167,4 @@ The application starts:
 
 - [ ] Migrate to **Spring Boot** with dependency injection
 - [ ] Add **JWT Authentication** for API security
-- [ ] Implement **React/Angular** frontend
-- [ ] Add **MySQL/PostgreSQL** support for production
-- [ ] Deploy to **AWS/Heroku** with CI/CD pipeline
 
----
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
