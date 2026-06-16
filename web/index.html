@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LastBank - Next-Gen Banking Core</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="navbar">
+    <div class="logo">🏦 LastBank</div>
+    <div class="nav-links">
+        <button class="nav-link active" onclick="showSection('dashboard')">Dashboard</button>
+        <button class="nav-link" onclick="viewCustomers()">Customers</button>
+        <button class="nav-link" onclick="viewAccounts()">Accounts</button>
+        <button class="nav-link" onclick="viewLoans()">Loans</button>
+    </div>
+    <div class="status-badge" id="statusBadge"><div class="status-dot"></div>Connecting...</div>
+</nav>
+
+<div class="container">
+    <div class="hero-section"><h1>Next-Gen Banking Core</h1><p>Powered by Java OOP & SQLite — Real-time financial operations</p></div>
+
+    <div class="summary-grid" id="summaryStats">
+        <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-value" id="statDeposits">₹0</div><div class="stat-label">Total Deposits</div></div>
+        <div class="stat-card"><div class="stat-icon">👥</div><div class="stat-value" id="statCustomers">0</div><div class="stat-label">Customers</div></div>
+        <div class="stat-card"><div class="stat-icon">🏦</div><div class="stat-value" id="statAccounts">0</div><div class="stat-label">Accounts</div></div>
+        <div class="stat-card"><div class="stat-icon">📋</div><div class="stat-value" id="statLoans">0</div><div class="stat-label">Total Loans</div></div>
+        <div class="stat-card"><div class="stat-icon">🟢</div><div class="stat-value" id="statActiveLoans">0</div><div class="stat-label">Active Loans</div></div>
+        <div class="stat-card"><div class="stat-icon">💳</div><div class="stat-value" id="statLoanAmt">₹0</div><div class="stat-label">Loan Disbursed</div></div>
+    </div>
+
+    <div class="dashboard-grid" id="dashboardSection">
+        <div class="card"><div class="card-icon">👤</div><h3 class="card-title">Customer Portal</h3><p class="card-desc">Onboard new clients with KYC validation and manage comprehensive profiles in our SQLite database.</p>
+            <button class="btn" onclick="openModal('customerModal')">Register Customer</button>
+            <button class="btn btn-secondary" onclick="viewCustomers()">View All Customers</button></div>
+
+        <div class="card"><div class="card-icon">🏦</div><h3 class="card-title">Account Operations</h3><p class="card-desc">Provision Savings, Current, and Fixed Deposit accounts with polymorphic interest calculation.</p>
+            <button class="btn" onclick="openModal('accountModal')">Open Account</button>
+            <button class="btn btn-secondary" onclick="viewAccounts()">View Accounts</button></div>
+
+        <div class="card"><div class="card-icon">💸</div><h3 class="card-title">Real-time Ledger</h3><p class="card-desc">Execute ACID transactions, inter-bank transfers, and update ledger balances instantly.</p>
+            <button class="btn" onclick="openModal('transactionModal')">Process Transaction</button>
+            <button class="btn btn-secondary" onclick="openModal('statementModal')">Mini Statement</button></div>
+
+        <div class="card"><div class="card-icon">📋</div><h3 class="card-title">Loan Processing</h3><p class="card-desc">Eligibility checks, EMI scheduling, one-click full settlement for Home, Personal & Education loans.</p>
+            <button class="btn" onclick="openModal('loanModal')">Apply for Loan</button>
+            <button class="btn btn-secondary" onclick="viewLoans()">View Loans</button></div>
+
+        <div class="card"><div class="card-icon">📈</div><h3 class="card-title">Interest Calculator</h3><p class="card-desc">Calculate and credit interest to Savings and Fixed Deposit accounts in one click.</p>
+            <button class="btn btn-success" onclick="openModal('interestModal')">Credit Interest</button></div>
+    </div>
+
+    <div id="dataSection" class="data-section" style="display:none;">
+        <div class="card" style="animation-delay:0s;opacity:1;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:.5rem">
+                <h3 class="card-title" id="tableTitle" style="margin-bottom:0">Data View</h3>
+                <button class="btn btn-secondary btn-sm" onclick="hideDataSection()">← Back to Dashboard</button>
+            </div>
+            <div id="tableContent" style="overflow-x:auto;"></div>
+        </div>
+    </div>
+</div>
+
+<footer class="footer">© 2025 <a href="#">LastBank</a> — Built with Core Java, OOP Design Patterns & SQLite | Resume Project by Developer</footer>
+
+<!-- MODALS -->
+<div id="customerModal" class="modal"><div class="modal-content"><span class="close-btn" onclick="closeModal('customerModal')">&times;</span><h2 class="modal-title">Register New Customer</h2>
+<form onsubmit="submitCustomer(event)">
+<div class="form-group"><label>Full Name</label><input type="text" id="cName" class="form-control" required></div>
+<div class="form-group"><label>Email Address</label><input type="email" id="cEmail" class="form-control" required></div>
+<div class="form-group"><label>Phone (10 digits)</label><input type="text" id="cPhone" class="form-control" required pattern="[6-9][0-9]{9}"></div>
+<div class="form-group"><label>PAN Card</label><input type="text" id="cPan" class="form-control" required pattern="[A-Z]{5}[0-9]{4}[A-Z]" placeholder="ABCDE1234F"></div>
+<button type="submit" class="btn">Register Customer</button></form></div></div>
+
+<div id="accountModal" class="modal"><div class="modal-content"><span class="close-btn" onclick="closeModal('accountModal')">&times;</span><h2 class="modal-title">Open New Account</h2>
+<form onsubmit="submitAccount(event)">
+<div class="form-group"><label>Customer ID</label><input type="text" id="aCustId" class="form-control" required placeholder="CUST1001"></div>
+<div class="form-group"><label>Account Type</label><select id="aType" class="form-control"><option value="SAVINGS">Savings (Min ₹1,000)</option><option value="CURRENT">Current (Min ₹5,000)</option><option value="FIXED_DEPOSIT">Fixed Deposit (Min ₹10,000)</option></select></div>
+<div class="form-group"><label>Initial Deposit (₹)</label><input type="number" id="aDeposit" class="form-control" required min="1000"></div>
+<button type="submit" class="btn">Open Account</button></form></div></div>
+
+<div id="transactionModal" class="modal"><div class="modal-content"><span class="close-btn" onclick="closeModal('transactionModal')">&times;</span><h2 class="modal-title">Process Transaction</h2>
+<form onsubmit="submitTransaction(event)">
+<div class="form-group"><label>Transaction Type</label><select id="tType" class="form-control" onchange="toggleTransferField()"><option value="deposit">Deposit</option><option value="withdraw">Withdraw</option><option value="transfer">Transfer</option></select></div>
+<div id="txnInfoBox" class="loan-info-box" style="display:block"><strong>Transaction Rules</strong><span id="tiRules"><b>Deposit:</b> Instant processing. Minimum deposit constraints apply.</span></div>
+<div class="form-group"><label>Account Number</label><input type="text" id="tAcc1" class="form-control" required placeholder="Source Account"></div>
+<div class="form-group" id="transferTarget" style="display:none"><label>Target Account</label><input type="text" id="tAcc2" class="form-control"></div>
+<div class="form-group"><label>Amount (₹)</label><input type="number" id="tAmt" class="form-control" required min="1"></div>
+<button type="submit" class="btn">Execute</button></form></div></div>
+
+<div id="statementModal" class="modal"><div class="modal-content"><span class="close-btn" onclick="closeModal('statementModal')">&times;</span><h2 class="modal-title">Mini Statement</h2>
+<form onsubmit="viewStatement(event)">
+<div class="form-group"><label>Account Number</label><input type="text" id="sAcc" class="form-control" required></div>
+<button type="submit" class="btn">Fetch Statement</button></form></div></div>
+
+<div id="loanModal" class="modal"><div class="modal-content"><span class="close-btn" onclick="closeModal('loanModal')">&times;</span><h2 class="modal-title">Apply For Loan</h2>
+<form onsubmit="submitLoan(event)">
+<div class="form-group"><label>Customer ID</label><input type="text" id="lCustId" class="form-control" required></div>
+<div class="form-group"><label>Linked Account</label><input type="text" id="lAcc" class="form-control" required></div>
+<div class="form-group"><label>Loan Type</label><select id="lType" class="form-control" onchange="updateLoanInfo()"><option value="" disabled selected>-- Select --</option><option value="HOME_LOAN">Home Loan</option><option value="PERSONAL_LOAN">Personal Loan</option><option value="EDUCATION_LOAN">Education Loan</option></select></div>
+<div id="loanInfoBox" class="loan-info-box"><strong>Eligibility & Policy</strong><span id="liRate"></span><span id="liCriteria"></span></div>
+<div class="form-group"><label>Loan Amount (₹)</label><input type="number" id="lAmt" class="form-control" required></div>
+<div class="form-group"><label>Tenure (Months)</label><input type="number" id="lTenure" class="form-control" required></div>
+<div class="form-group"><label>Annual Income (₹)</label><input type="number" id="lInc" class="form-control" required></div>
+<button type="submit" class="btn">Submit Application</button></form></div></div>
+
+<div id="interestModal" class="modal"><div class="modal-content"><span class="close-btn" onclick="closeModal('interestModal')">&times;</span><h2 class="modal-title">Credit Interest</h2>
+<form onsubmit="creditInterest(event)">
+<div class="form-group"><label>Account Number</label><input type="text" id="iAcc" class="form-control" required></div>
+<div class="loan-info-box" style="display:block"><strong>How Interest Works</strong><span>• <b>Savings:</b> (Balance × Rate) / 100<br>• <b>Fixed Deposit:</b> Quarterly compounding<br>• <b>Current:</b> No interest applicable</span></div>
+<button type="submit" class="btn btn-success">Calculate & Credit Interest</button></form></div></div>
+
+<div id="settleLoanModal" class="modal"><div class="modal-content"><span class="close-btn" onclick="closeModal('settleLoanModal')">&times;</span><h2 class="modal-title">⚡ One-Time Loan Settlement</h2>
+<div id="settleLoanInfo" class="loan-info-box" style="display:block"><strong>Settlement Details</strong><span id="settleDetails">Loading...</span></div>
+<p style="margin-bottom:1rem;color:var(--muted);font-size:.9rem">This will pay all remaining EMIs in one payment and close the loan permanently.</p>
+<button class="btn btn-warning" id="settleConfirmBtn" onclick="confirmSettle()">Confirm Full Settlement</button>
+<button class="btn btn-secondary" onclick="closeModal('settleLoanModal')">Cancel</button></div></div>
+
+<div id="deleteModal" class="modal"><div class="modal-content"><span class="close-btn" onclick="closeModal('deleteModal')">&times;</span><h2 class="modal-title">⚠️ Delete Customer</h2>
+<div class="loan-info-box" style="display:block;background:linear-gradient(to right bottom,#fee2e2,#fecaca);border-color:#fca5a5;color:#991b1b"><strong style="color:#991b1b">Warning: This action is irreversible!</strong><span>Before deletion, ensure:<br>• All account balances are ₹0<br>• All loans are fully settled<br>• All accounts are closed</span></div>
+<p id="deleteInfo" style="margin-bottom:1rem;font-weight:600"></p>
+<button class="btn btn-danger" id="deleteConfirmBtn" onclick="confirmDelete()">Permanently Delete Customer</button>
+<button class="btn btn-secondary" onclick="closeModal('deleteModal')">Cancel</button></div></div>
+
+<script>
+let currentSettleLoanId='';let currentDeleteCustId='';
+document.addEventListener("DOMContentLoaded",()=>{checkApiStatus();fetchSummary();});
+function checkApiStatus(){fetch('/api/status').then(r=>r.json()).then(()=>{document.getElementById('statusBadge').innerHTML='<div class="status-dot"></div> System Online';}).catch(()=>{document.getElementById('statusBadge').innerHTML='<div class="status-dot" style="background:red"></div> Offline';});}
+function fetchSummary(){fetch('/api/summary').then(r=>r.json()).then(d=>{animateValue('statCustomers',0,d.customers,800);animateValue('statAccounts',0,d.accounts,800);animateValue('statLoans',0,d.totalLoans,800);animateValue('statActiveLoans',0,d.activeLoans,800);document.getElementById('statDeposits').innerText='₹'+d.deposits.toLocaleString('en-IN',{minimumFractionDigits:2});document.getElementById('statLoanAmt').innerText='₹'+d.totalLoanAmount.toLocaleString('en-IN',{minimumFractionDigits:2});});}
+function animateValue(id,s,e,dur){if(s===e){document.getElementById(id).innerHTML=e;return;}let o=document.getElementById(id),r=e-s,c=s,inc=e>s?1:-1,st=Math.abs(Math.floor(dur/r)),t=setInterval(()=>{c+=inc;o.innerHTML=c;if(c==e)clearInterval(t);},st);}
+function showToast(msg,type){let t=document.createElement('div');t.className='toast toast-'+type;t.innerHTML=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),4000);}
+function openModal(id){document.getElementById(id).style.display='flex';}
+function closeModal(id){document.getElementById(id).style.display='none';}
+function showSection(s){document.getElementById('dashboardSection').style.display=s==='dashboard'?'grid':'none';document.getElementById('dataSection').style.display=s==='data'?'block':'none';document.querySelectorAll('.nav-link').forEach(n=>n.classList.remove('active'));if(s==='dashboard')document.querySelector('.nav-link').classList.add('active');}
+function hideDataSection(){showSection('dashboard');}
+function toggleTransferField(){const t=document.getElementById('tType').value;document.getElementById('transferTarget').style.display=t==='transfer'?'block':'none';const r=document.getElementById('tiRules');if(t==='deposit')r.innerHTML='<b>Deposit:</b> Instant processing. Minimum constraints apply.';else if(t==='withdraw')r.innerHTML='<b>Withdrawal Rules:</b><br>• <b>Savings:</b> Max 5/day. Min balance ₹1,000<br>• <b>Current:</b> Unlimited with overdraft<br>• <b>FD:</b> Premature withdrawal prohibited';else r.innerHTML='<b>Transfer:</b> Instant. Source must not be FD. Min balance rules apply.';}
+function updateLoanInfo(){const t=document.getElementById('lType').value,b=document.getElementById('loanInfoBox'),r=document.getElementById('liRate'),c=document.getElementById('liCriteria');b.style.display='block';if(t==='HOME_LOAN'){r.innerHTML='<b>Rate:</b> <span style="color:#047857;font-weight:700">8.5% p.a.</span> | <b>Max:</b> 30 Years';c.innerHTML='<b>Criteria:</b> Max 8x annual income. EMI ≤ 40% monthly income.';}else if(t==='PERSONAL_LOAN'){r.innerHTML='<b>Rate:</b> <span style="color:#047857;font-weight:700">12.0% p.a.</span> | <b>Max:</b> 5 Years';c.innerHTML='<b>Criteria:</b> Max 2x annual income. EMI ≤ 30% monthly income.';}else if(t==='EDUCATION_LOAN'){r.innerHTML='<b>Rate:</b> <span style="color:#047857;font-weight:700">7.0% p.a.</span> | <b>Max:</b> 15 Years';c.innerHTML='<b>Criteria:</b> Max ₹20 Lakhs. Relaxed EMI with moratorium.';}else b.style.display='none';}
+function submitCustomer(e){e.preventDefault();const d=new URLSearchParams();d.append('name',document.getElementById('cName').value);d.append('email',document.getElementById('cEmail').value);d.append('phone',document.getElementById('cPhone').value);d.append('pan',document.getElementById('cPan').value.toUpperCase());fetch('/api/customers',{method:'POST',body:d}).then(r=>r.json()).then(r=>{if(r.success){showToast('✅ Customer registered! ID: '+r.customerId,'success');closeModal('customerModal');fetchSummary();e.target.reset();}else showToast('❌ '+r.error,'error');});}
+function submitAccount(e){e.preventDefault();const d=new URLSearchParams();d.append('customerId',document.getElementById('aCustId').value.toUpperCase());d.append('type',document.getElementById('aType').value);d.append('deposit',document.getElementById('aDeposit').value);fetch('/api/accounts',{method:'POST',body:d}).then(r=>r.json()).then(r=>{if(r.success){showToast('✅ Account opened! No: '+r.accountNumber,'success');closeModal('accountModal');fetchSummary();e.target.reset();}else showToast('❌ '+r.error,'error');});}
+function submitTransaction(e){e.preventDefault();const t=document.getElementById('tType').value,d=new URLSearchParams();d.append('amount',document.getElementById('tAmt').value);if(t==='transfer'){d.append('fromAccount',document.getElementById('tAcc1').value);d.append('toAccount',document.getElementById('tAcc2').value);}else d.append('accountNumber',document.getElementById('tAcc1').value);fetch('/api/transactions/'+t,{method:'POST',body:d}).then(r=>r.json()).then(r=>{if(r.success){showToast('✅ Transaction successful!'+(r.newBalance?' New Balance: ₹'+r.newBalance:''),'success');closeModal('transactionModal');fetchSummary();e.target.reset();}else showToast('❌ '+r.error,'error');});}
+function submitLoan(e){e.preventDefault();const d=new URLSearchParams();d.append('customerId',document.getElementById('lCustId').value.toUpperCase());d.append('accountNumber',document.getElementById('lAcc').value);d.append('type',document.getElementById('lType').value);d.append('amount',document.getElementById('lAmt').value);d.append('tenure',document.getElementById('lTenure').value);d.append('income',document.getElementById('lInc').value);fetch('/api/loans',{method:'POST',body:d}).then(r=>r.json()).then(r=>{if(r.success){showToast('🎉 Loan Approved! ID: '+r.loanId+' | EMI: ₹'+r.emi,'success');closeModal('loanModal');fetchSummary();e.target.reset();}else showToast('❌ '+r.error,'error');});}
+function creditInterest(e){e.preventDefault();const d=new URLSearchParams();d.append('accountNumber',document.getElementById('iAcc').value);fetch('/api/accounts/interest',{method:'POST',body:d}).then(r=>r.json()).then(r=>{if(r.success){showToast('✅ Interest ₹'+r.interest+' credited! New Balance: ₹'+r.newBalance,'success');closeModal('interestModal');fetchSummary();}else showToast('❌ '+r.error,'error');});}
+function viewStatement(e){e.preventDefault();const a=document.getElementById('sAcc').value;fetch('/api/transactions/statement?accNo='+a).then(r=>r.json()).then(d=>{if(d.error){showToast('❌ '+d.error,'error');return;}closeModal('statementModal');showSection('data');document.getElementById('tableTitle').innerText='Mini Statement: '+a;let h='<table class="data-table"><tr><th>TXN ID</th><th>Type</th><th>Description</th><th>Amount</th><th>Balance</th></tr>';d.forEach(t=>{const tp=t.type.toLowerCase();const isCredit=tp.includes('deposit')||tp.includes('credit')||tp.includes('transfer in');const amtColor=isCredit?'color:#10b981':'color:#ef4444';const sign=isCredit?'+':'-';const badgeClass=isCredit?'badge-green':'badge-red';h+=`<tr><td style="font-weight:600">${t.id}</td><td><span class="badge ${badgeClass}">${t.type}</span></td><td>${t.desc}</td><td style="font-weight:700;${amtColor}">${sign}₹${t.amount.toFixed(2)}</td><td style="font-weight:600">₹${t.balance.toFixed(2)}</td></tr>`;});h+='</table>';document.getElementById('tableContent').innerHTML=h;});}
+function viewCustomers(){fetch('/api/customers').then(r=>r.json()).then(d=>{showSection('data');document.querySelectorAll('.nav-link').forEach(n=>n.classList.remove('active'));document.querySelectorAll('.nav-link')[1].classList.add('active');document.getElementById('tableTitle').innerText='Customer Directory ('+d.length+' registered)';let h='<table class="data-table"><tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th>Accounts</th><th>Total Balance</th><th>Actions</th></tr>';d.forEach(c=>{h+=`<tr><td><span style="font-weight:600;color:var(--primary)">${c.id}</span></td><td style="font-weight:600">${c.name}</td><td>${c.email}</td><td>${c.phone}</td><td><span class="badge badge-blue">${c.accountCount}</span></td><td style="font-weight:700">₹${c.balance.toFixed(2)}</td><td><button class="btn btn-danger btn-sm" onclick="openDeleteModal('${c.id}','${c.name}')">Delete</button></td></tr>`;});h+='</table>';document.getElementById('tableContent').innerHTML=h;});}
+function viewAccounts(){fetch('/api/accounts').then(r=>r.json()).then(d=>{showSection('data');document.querySelectorAll('.nav-link').forEach(n=>n.classList.remove('active'));document.querySelectorAll('.nav-link')[2].classList.add('active');document.getElementById('tableTitle').innerText='Bank Accounts ('+d.length+' total)';let h='<table class="data-table"><tr><th>Account No</th><th>Holder</th><th>Type</th><th>Balance</th><th>Status</th><th>Actions</th></tr>';d.forEach(a=>{const sc=a.active?'badge-green':'badge-red';h+=`<tr><td><span style="font-weight:600;color:var(--primary)">${a.accNo}</span></td><td style="font-weight:600">${a.holder}</td><td><span class="badge badge-blue">${a.type}</span></td><td style="font-weight:700">₹${a.balance.toFixed(2)}</td><td><span class="badge ${sc}">${a.active?'Active':'Closed'}</span></td><td>${a.active?`<button class="btn btn-danger btn-sm" onclick="closeAccount('${a.accNo}')">Close</button>`:'-'}</td></tr>`;});h+='</table>';document.getElementById('tableContent').innerHTML=h;});}
+function viewLoans(){fetch('/api/loans').then(r=>r.json()).then(d=>{showSection('data');document.querySelectorAll('.nav-link').forEach(n=>n.classList.remove('active'));document.querySelectorAll('.nav-link')[3].classList.add('active');document.getElementById('tableTitle').innerText='Loan Portfolio ('+d.length+' loans)';let h='<table class="data-table"><tr><th>Loan ID</th><th>Customer</th><th>Type</th><th>Principal</th><th>EMI</th><th>Paid</th><th>Remaining</th><th>Status</th><th>Actions</th></tr>';d.forEach(l=>{const sc=l.status==='Active'?'badge-green':l.status==='Closed'?'badge-yellow':'badge-blue';h+=`<tr><td><span style="font-weight:600;color:var(--primary)">${l.id}</span></td><td>${l.custId}</td><td>${l.type}</td><td style="font-weight:600">₹${l.principal.toFixed(2)}</td><td style="font-weight:600;color:#ef4444">₹${l.emi.toFixed(2)}</td><td>${l.emisPaid}/${l.totalEmis}</td><td style="font-weight:600">₹${l.remaining.toFixed(2)}</td><td><span class="badge ${sc}">${l.status}</span></td><td>${l.status==='Active'?`<button class="btn btn-warning btn-sm" onclick="openSettleModal('${l.id}',${l.remaining},${l.totalEmis-l.emisPaid})">Settle</button> <button class="btn btn-sm" onclick="payOneEMI('${l.id}')">Pay EMI</button>`:l.status==='Closed'?'✅ Settled':'-'}</td></tr>`;});h+='</table>';document.getElementById('tableContent').innerHTML=h;});}
+function closeAccount(accNo){if(!confirm('Close account '+accNo+'?'))return;const d=new URLSearchParams();d.append('accountNumber',accNo);fetch('/api/accounts/close',{method:'POST',body:d}).then(r=>r.json()).then(r=>{if(r.success){showToast('✅ Account '+accNo+' closed','success');fetchSummary();viewAccounts();}else showToast('❌ '+r.error,'error');});}
+function openSettleModal(loanId,remaining,remEMIs){currentSettleLoanId=loanId;document.getElementById('settleDetails').innerHTML=`<b>Loan ID:</b> ${loanId}<br><b>Remaining Amount:</b> <span style="color:#dc2626;font-weight:700">₹${remaining.toFixed(2)}</span><br><b>Remaining EMIs:</b> ${remEMIs}<br><br>Pay <b>₹${remaining.toFixed(2)}</b> now to close this loan permanently.`;openModal('settleLoanModal');}
+function confirmSettle(){const d=new URLSearchParams();d.append('loanId',currentSettleLoanId);fetch('/api/loans/settle',{method:'POST',body:d}).then(r=>r.json()).then(r=>{if(r.success){showToast('🎉 Loan settled! ₹'+r.settledAmount+' paid ('+r.emisCleared+' EMIs cleared)','success');closeModal('settleLoanModal');fetchSummary();viewLoans();}else showToast('❌ '+r.error,'error');});}
+function payOneEMI(loanId){const d=new URLSearchParams();d.append('loanId',loanId);fetch('/api/loans/payemi',{method:'POST',body:d}).then(r=>r.json()).then(r=>{if(r.success){showToast('✅ EMI paid! Remaining: '+r.remainingEMIs+(r.active?'':' — Loan Closed! 🎉'),'success');fetchSummary();viewLoans();}else showToast('❌ '+r.error,'error');});}
+function openDeleteModal(custId,name){currentDeleteCustId=custId;document.getElementById('deleteInfo').innerText='Delete customer: '+custId+' ('+name+')?';openModal('deleteModal');}
+function confirmDelete(){const d=new URLSearchParams();d.append('customerId',currentDeleteCustId);fetch('/api/customers/delete',{method:'POST',body:d}).then(r=>r.json()).then(r=>{if(r.success){showToast('✅ Customer '+currentDeleteCustId+' deleted permanently','success');closeModal('deleteModal');fetchSummary();viewCustomers();}else showToast('❌ '+r.error,'error');});}
+</script>
+</body>
+</html>
