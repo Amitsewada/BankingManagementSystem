@@ -49,14 +49,14 @@ public class BankingApplication {
                     case 5:  bankSummary(); break;
                     case 0:
                         running = false;
-                        System.out.println("\n🙏 Thank you for using Banking Management System!");
+                        System.out.println("\n Thank you for using Banking Management System!");
                         System.out.println("   Transaction log saved to: transaction_log.txt");
                         break;
                     default:
                         System.out.println("⚠ Invalid choice. Please try again.");
                 }
             } catch (Exception e) {
-                System.out.println("❌ Error: " + e.getMessage());
+                System.out.println(" Error: " + e.getMessage());
             }
         }
         scanner.close();
@@ -68,7 +68,7 @@ public class BankingApplication {
         System.out.println();
         System.out.println("╔══════════════════════════════════════════════════════════════╗");
         System.out.println("║                                                              ║");
-        System.out.println("║          🏦  BANKING MANAGEMENT SYSTEM  🏦                  ║");
+        System.out.println("║            BANKING MANAGEMENT SYSTEM                         ║");
         System.out.println("║                                                              ║");
         System.out.println("║          A Java OOP Console Application                      ║");
         System.out.println("║          Version 1.0                                         ║");
@@ -114,7 +114,7 @@ public class BankingApplication {
                     default: System.out.println("⚠ Invalid choice.");
                 }
             } catch (Exception e) {
-                System.out.println("❌ Error: " + e.getMessage());
+                System.out.println(" Error: " + e.getMessage());
             }
         }
     }
@@ -264,7 +264,7 @@ public class BankingApplication {
                     default: System.out.println("⚠ Invalid choice.");
                 }
             } catch (Exception e) {
-                System.out.println("❌ Error: " + e.getMessage());
+                System.out.println(" Error: " + e.getMessage());
             }
         }
     }
@@ -312,7 +312,7 @@ public class BankingApplication {
     private static void checkBalance() throws AccountNotFoundException {
         String accNo = getStringInput("Account Number: ");
         Account account = bankService.findAccount(accNo);
-        System.out.printf("%n💰 Account: %s | Balance: ₹%.2f | Type: %s%n",
+        System.out.printf("%n Account: %s | Balance: ₹%.2f | Type: %s%n",
                 accNo, account.getBalance(), account.getAccountType().getDisplayName());
     }
 
