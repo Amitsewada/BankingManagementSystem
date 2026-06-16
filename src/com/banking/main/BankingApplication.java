@@ -80,13 +80,13 @@ public class BankingApplication {
     private static void printMainMenu() {
         System.out.println("\n╔══════════════════════════════════════╗");
         System.out.println("║           MAIN MENU                  ║");
-        System.out.println("╠══════════════════════════════════════╣");
-        System.out.println("║  1. 👤 Customer Management           ║");
-        System.out.println("║  2. 🏦 Account Management            ║");
-        System.out.println("║  3. 💰 Transactions                  ║");
-        System.out.println("║  4. 📋 Loan Management               ║");
-        System.out.println("║  5. 📊 Bank Summary                  ║");
-        System.out.println("║  0. 🚪 Exit                          ║");
+        System.out.println("╠════════════════════════════════════╣");
+        System.out.println("║  1.  Customer Management           ║");
+        System.out.println("║  2.  Account Management            ║");
+        System.out.println("║  3.  Transactions                  ║");
+        System.out.println("║  4.  Loan Management               ║");
+        System.out.println("║  5.  Bank Summary                  ║");
+        System.out.println("║  0.  Exit                          ║");
         System.out.println("╚══════════════════════════════════════╝");
     }
 
@@ -344,7 +344,7 @@ public class BankingApplication {
                     default: System.out.println("⚠ Invalid choice.");
                 }
             } catch (Exception e) {
-                System.out.println("❌ Error: " + e.getMessage());
+                System.out.println(" Error: " + e.getMessage());
             }
         }
     }
@@ -409,7 +409,7 @@ public class BankingApplication {
         BankServiceImpl serviceImpl = (BankServiceImpl) bankService;
 
         System.out.println("\n╔══════════════════════════════════════════════════╗");
-        System.out.println("║              🏦 BANK SUMMARY                    ║");
+        System.out.println("║               BANK SUMMARY                    ║");
         System.out.println("╠══════════════════════════════════════════════════╣");
         System.out.printf("║  Total Customers  : %-28d ║%n", bankService.getAllCustomers().size());
         System.out.printf("║  Total Accounts   : %-28d ║%n", bankService.getAllAccounts().size());
@@ -453,7 +453,7 @@ public class BankingApplication {
                 double value = Double.parseDouble(scanner.nextLine().trim());
                 return value;
             } catch (NumberFormatException e) {
-                System.out.println("⚠ Please enter a valid number.");
+                System.out.println(" Please enter a valid number.");
             }
         }
     }
